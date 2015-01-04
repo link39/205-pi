@@ -46,15 +46,15 @@
 		$bdd->exec($sql1);	
 	
 		# Recherche de l'ancien ID
-		$sql0 = $bdd->query('SELECT MAX(id_trajet) FROM Trajet');
-		$req = mysql_query($sql0);
-		while($data = mysql_fetch_array($req)) 
-		{ 
-			echo 'data =' . $data['id_trajet'];
+		$sql = "SELECT MAX(id_trajet) AS id_trajet FROM Trajet"; 		
+		foreach  ($bdd->query($sql) as $row) {
+			$id = $row['id_trajet'];
 		}
+
+		echo '<p>'. $id .'</p>';
 		
 		// Update du trajet en cours
-		$sql2 = "UPDATE record SET id_trajet_en_cours='$id'";
+		$sql2 = "UPDATE Instantane SET Trajet_en_cours=".$id."";
 		$bdd->exec($sql2);		
 		
 
