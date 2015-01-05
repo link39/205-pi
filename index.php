@@ -16,17 +16,30 @@
     <link href="/css/starter-template.css" rel="stylesheet">
 	
 	<script type="text/javascript">
-		setInterval("my_function();",1000); 
-		function my_function(){
+		setInterval("lire_vitesse();",1000); 
+		function lire_vitesse(){
 			$('#ajax').load("/cgi-bin/lire_vitesse");
 		};	
     </script>
+	
+	<script type="text/javascript">
+		var photo;
+		setInterval("conducteur();",5000); 
+		function conducteur(){
+			$('#Nconducteur').load("/cgi-bin/conducteur_nom");
+			$('#PconducteurTemp').load("/cgi-bin/conducteur_photo");
+			photo = $('#PconducteurTemp').html();
+			$('#Pconducteur').attr('src', photo);
+		};	
+    </script>
+	
 
   </head>
 
   <body>
   
   <?php
+	# Ajout d'un nouveau trajet
 	if(isset($_GET['nom'])&&($_GET['description'])){
 		try
 		{
@@ -45,7 +58,7 @@
 		$sql1 = "INSERT INTO Trajet (Nom,Description) VALUES('$nom','$description')";
 		$bdd->exec($sql1);	
 	
-		# Recherche de l'ancien ID
+		# Recherche de l'id du trajet en cours
 		$sql = "SELECT MAX(id_trajet) AS id_trajet FROM Trajet"; 		
 		foreach  ($bdd->query($sql) as $row) {
 			$id = $row['id_trajet'];
@@ -93,6 +106,9 @@
 		<div>
 			<h1 class="starter-template" id="ajax">Vitesse</h1>
 			</br>
+			<p id="Nconducteur"></p>
+			<p id="PconducteurTemp" style="display:none;"></p>
+			<img id="Pconducteur" src="" alt="Conducteur" height="64" width="64">
 			<button type="button" class="pull-right glyphicon glyphicon-plus btn btn-success" data-toggle="modal" data-target="#myModal" >Ajouter un trajet</button>
 		</div>
     </div><!-- /.container -->

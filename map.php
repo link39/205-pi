@@ -57,7 +57,7 @@
 
 	  flightPath.setMap(map);
 
-	  
+
       var infoWindow = new google.maps.InfoWindow;
 
       // Change this depending on the name of your PHP file
