@@ -30,6 +30,9 @@
 			$('#PconducteurTemp').load("/cgi-bin/conducteur_photo");
 			photo = $('#PconducteurTemp').html();
 			$('#Pconducteur').attr('src', photo);
+			$('#tempsConduiteTemp').load("/cgi-bin/tempsConduite");
+			tempsConduite = $('#tempsConduiteTemp').html();
+			$('#tempsConduite').attr('value',tempsConduite.trim());
 		};	
     </script>
 	
@@ -108,6 +111,8 @@
 			</br>
 			<p id="Nconducteur"></p>
 			<p id="PconducteurTemp" style="display:none;"></p>
+			<p id="tempsConduiteTemp" style="display:none;"></p>
+			<p><progress id="tempsConduite" value="0" max="100"></progress></p>
 			<img id="Pconducteur" src="" alt="Conducteur" height="64" width="64">
 			<button type="button" class="pull-right glyphicon glyphicon-plus btn btn-success" data-toggle="modal" data-target="#myModal" >Ajouter un trajet</button>
 		</div>

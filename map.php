@@ -29,6 +29,7 @@
     };
 
     function load() {
+	
       var map = new google.maps.Map(document.getElementById("map"), {
         center: new google.maps.LatLng(45, 5),
         zoom: 6,
@@ -36,8 +37,21 @@
       });
 	  
 	  var flightPlanCoordinates = new Array();
+	  <?php
+	  if(isset($_GET['Trajet'])){
+	  ?>
+	  downloadUrl("mapXMLpoint.php?id=<?php $_GET['Trajet']; ?>", function(data) {
+      <?php
+	  }
+	  else{
+	  ?>
 	  downloadUrl("mapXMLpoint.php", function(data) {
-        var xmlPoint = data.responseXML;
+	  
+	  <?php
+	  }
+	  ?>
+		
+		var xmlPoint = data.responseXML;
         var points = xmlPoint.documentElement.getElementsByTagName("point");
         for (var i = 0; i < points.length; i++) {
           var point = new google.maps.LatLng(
@@ -152,7 +166,19 @@
   </head>
 
   <body onload="load()">
+	<?php
+	try
+	{
+		$bdd = new PDO('mysql:host=localhost;dbname=Voiture', 'root', 'bananapi');
+	}
+	catch(Exception $e)
+	{
+			die('Erreur : '.$e->getMessage());
+	}
 
+	$reponse = $bdd->query('SELECT * FROM Trajet');
+	?>
+	
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -179,7 +205,21 @@
     <div class="container">
 
       <div class="starter-template">
-			<div id="map" style="width: 900px; height: 450px"></div>
+		<div id="map" style="width: 900px; height: 450px"></div>
+		<form name"Formulaire">
+		<p>Trajet : <select name="Trajet" id="id_trajet">
+		<?php 
+			while ($donnees = $reponse->fetch())
+			{
+				echo "<option value='".$donnees['id_trajet']."'>".$donnees['Nom']."</option>";
+			}
+		?>
+		</select></p>		 
+		<input type="submit" value="Afficher">
+		</form>
+		
+		<!-- Affichage map -->
+		
       </div>
 
     </div><!-- /.container -->
