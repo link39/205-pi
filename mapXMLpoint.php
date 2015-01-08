@@ -24,7 +24,8 @@ if (!$db_selected) {
 
 // Select all the rows in the point table
 if(isset($_GET['id'])){
-	$query = "SELECT latitude,longitude FROM kilometre WHERE ".$_GET['id'];
+
+	$query = 'SELECT latitude,longitude FROM kilometre WHERE id_trajet='.$_GET['id'];
 }
 else{
 	$query = "SELECT latitude,longitude FROM kilometre k join Trajet t on t.id_trajet = k.id_trajet where k.id_trajet = (select MAX(t.id_trajet) FROM Trajet)";

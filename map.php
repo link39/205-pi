@@ -40,7 +40,7 @@
 	  <?php
 	  if(isset($_GET['Trajet'])){
 	  ?>
-	  downloadUrl("mapXMLpoint.php?id=<?php $_GET['Trajet']; ?>", function(data) {
+	  downloadUrl("mapXMLpoint.php?id=<?php echo $_GET['Trajet']?>", function(data) {
       <?php
 	  }
 	  else{
