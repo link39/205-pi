@@ -5,13 +5,13 @@ previous_latitude=`mysql -uroot -pbananapi -se "SELECT latitude FROM Voiture.kil
 previous_longitude=`mysql -uroot -pbananapi -se "SELECT longitude FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
 
 #Réccupération des nouvelles coordonnées
-new_latitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f7 | cut -d: -f2 | cut -d, -f7 | head -1`
-new_longitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f8 | cut -d: -f2 | cut -d, -f7 | head -1`
+new_latitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f7 | cut -d: -f2 | cut -c 1-7 | head -1`    
+new_longitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f8 | cut -d: -f2 | cut -c 1-7 | head -1`  
 
 
 #Réccupération des autres nouvelles données
 previous_kil_essence=10
-altitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f9 | cut -d "." -f1 | head -1`
+altitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f9 | cut -d ":" -f2 | cut -d "." -f1 | head -1`
 vitesse=`mysql -uroot -pbananapi -se "SELECT vitesse FROM Voiture.Instantane;"`
 id_conducteur=`mysql -uroot -pbananapi -se "SELECT Conducteur_en_cours FROM Voiture.Instantane;"`
 id_trajet=`mysql -uroot -pbananapi -se "SELECT Trajet_en_cours FROM Voiture.Instantane;"`
@@ -38,6 +38,6 @@ kilometre_cumule_essence=`echo "$kilometre_cumule + $previous_kil_essence" | bc 
 
 
 #Ajoute en base la nouvelle entrée si l'on est en déplacement supérieur à 15km/h
-if [[ $vitesse -gt 15 ]]
+if [[ $vitesse -gt 15 && $new_latitude -ne 0 && $new_longitude -ne 0 ]]
 then mysql -uroot -pbananapi -e "INSERT INTO \`Voiture\`.\`kilometre\` (\`Date\`,\`longitude\`, \`latitude\`,\`altitude\`,\`vitesse\`,\`interieur\`,\`exterieur\`,\`kilometre_cumule\`,\`Nord\`,\`Depart\`,\`Arrivee\`,\`essence\`,\`kilometre_cumule_essence\`,\`id_trajet\`,\`id_conducteur\`) VALUES (\"$date\",\"$new_longitude\", \"$new_latitude\",\"$altitude\",\"$vitesse\",\"$interieur\",\"$exterieur\",\"$kilometre_cumule\",\"$nord\",\"$depart\",\"$arrivee\",\"$essence\",\"$kilometre_cumule_essence\",\"$id_trajet\",\"$id_conducteur\");"
 fi
