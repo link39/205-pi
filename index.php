@@ -43,7 +43,7 @@
   
   <?php
 	# Ajout d'un nouveau trajet
-	if(isset($_GET['nom'])&&($_GET['description'])){
+	if(isset($_GET['nom']) || ($_GET['nom']) && ($_GET['description'])){
 		try
 		{
 			$bdd = new PDO('mysql:host=localhost;dbname=Voiture', 'root', 'bananapi');
@@ -66,8 +66,6 @@
 		foreach  ($bdd->query($sql) as $row) {
 			$id = $row['id_trajet'];
 		}
-
-		echo '<p>'. $id .'</p>';
 		
 		// Update du trajet en cours
 		$sql2 = "UPDATE Instantane SET Trajet_en_cours=".$id."";
