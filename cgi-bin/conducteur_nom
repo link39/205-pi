@@ -1,0 +1,7 @@
+#!/bin/bash
+cat <<END
+Content-Type: text/plain
+
+END
+conducteur=`mysql -uroot -pbananapi -se "SELECT c.Prenom FROM Voiture.Instantane i INNER JOIN Voiture.Conducteur c ON i.Conducteur_en_cours = c.id_conducteur ;"`
+echo Bienvenue $conducteur;

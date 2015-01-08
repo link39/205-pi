@@ -1,0 +1,42 @@
+#!/bin/bash
+
+#Réccupération des dernières données de géolocalisation
+previous_latitude=`mysql -uroot -pbananapi -se "SELECT latitude FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
+previous_longitude=`mysql -uroot -pbananapi -se "SELECT longitude FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
+
+#Réccupération des nouvelles coordonnées
+new_latitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f7 | cut -d: -f2 | head -1`
+new_longitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f8 | cut -d: -f2 | head -1`
+
+
+#Réccupération des autres nouvelles données
+previous_kil_essence=10
+altitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f9 | cut -d: -f2 | head -1`
+vitesse=`mysql -uroot -pbananapi -se "SELECT vitesse FROM Voiture.Instantane;"`
+vitesse_1=`echo "vitesse + 1" | bc -l`
+interieur=26
+exterieur=30
+nord=80
+depart=1
+arrivee=0
+essence=0
+date=`date "+%F %T"`
+
+#Fonction PHP qui calcul la distance parcouru entre le point précedent et l'actuel
+kilometre_cumule=`/usr/bin/php -f gps_php.php $previous_latitude $previous_longitude $new_latitude $new_longitude`
+
+# Calcul du kilometre cumulé.
+previous_kil=`mysql -uroot -pbananapi -se "SELECT kilometre_cumule FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
+#previous_kil_essence=`mysql -uroot -pbananapi -se "SELECT kilometre_cumule_essence FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
+
+#previous_kil=10
+previous_kil_essence=10
+
+kilometre_cumule=`echo "$kilometre_cumule + $previous_kil" | bc -l`
+kilometre_cumule_essence=`echo "$kilometre_cumule + $previous_kil_essence" | bc -l`
+
+
+#Ajoute en base la nouvelle entrée si l'on est en déplacement supérieur à 5km/h
+if [[ $vitesse_1 -gt 5 ]]
+then mysql -uroot -pbananapi -e "INSERT INTO \`Voiture\`.\`kilometre\` (\`Date\`,\`longitude\`, \`latitude\`,\`altitude\`,\`vitesse\`,\`interieur\`,\`exterieur\`,\`kilometre_cumule\`,\`Nord\`,\`Depart\`,\`Arrivee\`,\`essence\`,\`kilometre_cumule_essence\`) VALUES (\"$date\",\"$new_longitude\", \"$new_latitude\",\"$altitude\",\"$vitesse\",\"$interieur\",\"$exterieur\",\"$kilometre_cumule\",\"$nord\",\"$depart\",\"$arrivee\",\"$essence\",\"$kilometre_cumule_essence\");"
+fi
