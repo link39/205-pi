@@ -5,8 +5,8 @@ previous_latitude=`mysql -uroot -pbananapi -se "SELECT latitude FROM Voiture.kil
 previous_longitude=`mysql -uroot -pbananapi -se "SELECT longitude FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
 
 #Réccupération des nouvelles coordonnées
-new_latitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f7 | cut -d: -f2 | cut -c 1-7 | head -1`    
-new_longitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f8 | cut -d: -f2 | cut -c 1-7 | head -1`  
+new_latitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f7 | cut -d: -f2 | cut -c 1-7 | head -1`
+new_longitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f8 | cut -d: -f2 | cut -c 1-7 | head -1`
 
 
 #Réccupération des autres nouvelles données
@@ -24,7 +24,8 @@ essence=0
 date=`date "+%F %T"`
 
 #Fonction PHP qui calcul la distance parcouru entre le point précedent et l'actuel
-kilometre_cumule=`/usr/bin/php -f gps_php.php $previous_latitude $previous_longitude $new_latitude $new_longitude`
+#kilometre_cumule=`/usr/bin/php -f gps_php.php $previous_latitude $previous_longitude $new_latitude $new_longitude`
+kilometre_cumule=`/usr/bin/php -f gps_php.php $previous_latitude $previous_longitude 0 0`
 
 # Calcul du kilometre cumulé.
 previous_kil=`mysql -uroot -pbananapi -se "SELECT kilometre_cumule FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
@@ -36,8 +37,15 @@ previous_kil_essence=10
 kilometre_cumule=`echo "$kilometre_cumule + $previous_kil" | bc -l`
 kilometre_cumule_essence=`echo "$kilometre_cumule + $previous_kil_essence" | bc -l`
 
+# Conversion des float en int pour comparaison futur
+#new_longitude=5.445
+intLon=${new_longitude%.*}
+#new_latitude=45.455
+intLat=${new_latitude%.*}
+#vitesse=20
 
-#Ajoute en base la nouvelle entrée si l'on est en déplacement supérieur à 15km/h
-if [[ $vitesse -gt 15 && $new_latitude -ne 0 && $new_longitude -ne 0 ]]
-then mysql -uroot -pbananapi -e "INSERT INTO \`Voiture\`.\`kilometre\` (\`Date\`,\`longitude\`, \`latitude\`,\`altitude\`,\`vitesse\`,\`interieur\`,\`exterieur\`,\`kilometre_cumule\`,\`Nord\`,\`Depart\`,\`Arrivee\`,\`essence\`,\`kilometre_cumule_essence\`,\`id_trajet\`,\`id_conducteur\`) VALUES (\"$date\",\"$new_longitude\", \"$new_latitude\",\"$altitude\",\"$vitesse\",\"$interieur\",\"$exterieur\",\"$kilometre_cumule\",\"$nord\",\"$depart\",\"$arrivee\",\"$essence\",\"$kilometre_cumule_essence\",\"$id_trajet\",\"$id_conducteur\");"
+#Ajoute en base la nouvelle entrée si l'on est en déplacement supérieur à 15km/h et lat et lon non egal à 0
+if [[ $vitesse -gt 15 && $intLat -ne 0 && $intLon -ne 0 ]]
+then 
+mysql -uroot -pbananapi -e "INSERT INTO \`Voiture\`.\`kilometre\` (\`Date\`,\`longitude\`, \`latitude\`,\`altitude\`,\`vitesse\`,\`interieur\`,\`exterieur\`,\`kilometre_cumule\`,\`Nord\`,\`Depart\`,\`Arrivee\`,\`essence\`,\`kilometre_cumule_essence\`,\`id_trajet\`,\`id_conducteur\`) VALUES (\"$date\",\"$new_longitude\", \"$new_latitude\",\"$altitude\",\"$vitesse\",\"$interieur\",\"$exterieur\",\"$kilometre_cumule\",\"$nord\",\"$depart\",\"$arrivee\",\"$essence\",\"$kilometre_cumule_essence\",\"$id_trajet\",\"$id_conducteur\");"
 fi
