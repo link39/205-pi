@@ -42,20 +42,11 @@
 			}
 		);
 	</script>
-    <script type="text/javascript">
-	setInterval("my_function();",1000); 
-	function my_function(){
-		$('#ajax').load("/cgi-bin/lire_vitesse");
-	};
-	
-    </script>
+
 
   </head>
 
   <body>
-      <div id="ajax">
-         <p>Some random test</p>
-      </div>
     <?php
 	 if(isset($_GET['date'])&&($_GET['litre'])&&($_GET['prixlitre'])){
 		$fix=shell_exec("/home/pi/get_fix");
@@ -113,7 +104,7 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="index.html">Home</a></li>
+            <li><a href="index.php">Home</a></li>
             <li><a href="entretien.php">Entretien</a></li>
             <li><a href="carnet.php">Carnet de bord</a></li>
             <li class="active"><a href="consommation.php">Consommation</a></li>

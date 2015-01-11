@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Reconnaissance faciale
+cam_conducteur=1
+
+# Réccupération ancien conducteur
+ancien_conducteur=`mysql -uroot -pbananapi -se "SELECT Conducteur_en_cours FROM Voiture.Instantane ORDER BY Id DESC LIMIT 1;"`
+
+# Si meme conducteur, temps + 1
+if [[ $cam_conducteur -eq $ancien_conducteur ]]
+then
+	temps=`mysql -uroot -pbananapi -se "SELECT temps_conduite FROM Voiture.Instantane ORDER BY Id DESC LIMIT 1;"`
+	echo $temps
+	temps=`echo $temps + 1 | bc -l`
+	echo $temps
+	mysql -uroot -pbananapi -se "UPDATE Voiture.Instantane SET temps_conduite=$temps;"
+# Sinon update base Instantanée conducteur en cours et temps = 0
+else
+	mysql -uroot -pbananapi -se "UPDATE Voiture.Instantane SET temps_conduite=0;"
+	mysql -uroot -pbananapi -se "UPDATE Voiture.Instantane SET Conducteur_en_cours=$cam_conducteur;"
+fi

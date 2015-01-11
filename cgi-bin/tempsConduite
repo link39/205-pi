@@ -3,6 +3,6 @@ cat <<END
 Content-Type: text/plain
 
 END
-tempsConduite=`mysql -uroot -pbananapi -se "SELECT c.Temps_conduite_partiel FROM Voiture.Conducteur c INNER JOIN Voiture.Instantane i ON i.Conducteur_en_cours = c.id_conducteur;"`
-pourcent=`echo "$tempsConduite*0.83" | bc -l | cut -d "." -f1`;
+tempsConduite=`mysql -uroot -pbananapi -se "SELECT temps_conduite FROM Voiture.Instantane ORDER BY Id DESC LIMIT 1";`
+pourcent=`echo "$tempsConduite*0.83" | bc -l | cut -d "." -f1`
 echo $pourcent;
