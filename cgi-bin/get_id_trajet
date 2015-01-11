@@ -1,0 +1,3 @@
+#!/bin/bash
+id_trajet=`mysql -uroot -pbananapi -se "SELECT Trajet_en_cours FROM Voiture.Instantane ORDER BY Id DESC LIMIT 1;"` 
+echo $id_trajet

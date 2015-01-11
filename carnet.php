@@ -55,14 +55,15 @@
 			$message = $_GET['message'];
 			
 			// Réccupération de la latitude et longitude
-			$latitude=shell_exec("/home/pi/get_lat");
-			$longitude=shell_exec("/home/pi/get_lon");
+			$latitude=shell_exec("/var/www/cgi-bin/get_lat");
+			$longitude=shell_exec("/var/www/cgi-bin/get_lon");
+			$id_trajet=shell_exec("/var/www/cgi-bin/get_id_trajet");
 			
 			$latitude=round($latitude, 4);
 			$longitude=round($longitude, 4);
 							
 			// On insert une entrée
-			$sql = "INSERT INTO carnet (Date,gps,longitude,latitude,Heure,Auteur,Lieu,Message,Jour) VALUES('$date','1','$longitude','$latitude','$heure','$auteur','$lieu','$message','$jour')";
+			$sql = "INSERT INTO carnet (Date,gps,longitude,latitude,Heure,Auteur,Lieu,Message,Jour,id_trajet) VALUES('$date','1','$longitude','$latitude','$heure','$auteur','$lieu','$message','$jour','$id_trajet')";
 			
 			// On insert une entrée
 			$bdd->exec($sql);
