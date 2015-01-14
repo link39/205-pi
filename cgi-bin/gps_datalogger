@@ -1,53 +1,72 @@
 #!/bin/bash
 
-#Réccupération des dernières données de géolocalisation
-previous_latitude=`mysql -uroot -pbananapi -se "SELECT latitude FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
-previous_longitude=`mysql -uroot -pbananapi -se "SELECT longitude FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
-
-#Réccupération des nouvelles coordonnées depuis le GPS
-new_latitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f7 | cut -d: -f2 | cut -c 1-7 | head -1`
-new_longitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f8 | cut -d: -f2 | cut -c 1-7 | head -1`
-altitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f9 | cut -d ":" -f2 | cut -d "." -f1 | head -1`
-nord=80
-date=`date "+%F %T"`
-
-#Réccupération des données en base
-previous_kil_essence=10
-vitesse=`mysql -uroot -pbananapi -se "SELECT vitesse FROM Voiture.Instantane;"`
-id_conducteur=`mysql -uroot -pbananapi -se "SELECT Conducteur_en_cours FROM Voiture.Instantane;"`
-id_trajet=`mysql -uroot -pbananapi -se "SELECT Trajet_en_cours FROM Voiture.Instantane;"`
-depart=1
-arrivee=0
-essence=0
-
-#Réccupération des températures
-interieur=26
-exterieur=30
-
-#Fonction PHP qui calcul la distance parcouru entre le point précedent et l'actuel
-kilometre_cumule=`/usr/bin/php -f gps_php.php $previous_latitude $previous_longitude $new_latitude $new_longitude`
-#kilometre_cumule=`/usr/bin/php -f gps_php.php $previous_latitude $previous_longitude 0 0`
-#echo $kilometre_cumule
-
-# Calcul du kilometre cumulé.
-previous_kil=`mysql -uroot -pbananapi -se "SELECT kilometre_cumule FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
-#previous_kil_essence=`mysql -uroot -pbananapi -se "SELECT kilometre_cumule_essence FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
-
-#previous_kil=10
-previous_kil_essence=10
-
-kilometre_cumule=`echo "$kilometre_cumule + $previous_kil" | bc -l`
-kilometre_cumule_essence=`echo "$kilometre_cumule + $previous_kil_essence" | bc -l`
-
-# Conversion des float en int pour comparaison futur
-#new_longitude=5.445
-intLon=${new_longitude%.*}
-#new_latitude=45.455
-intLat=${new_latitude%.*}
-#vitesse=20
-
-#Ajoute en base la nouvelle entrée si l'on est en déplacement supérieur à 15km/h et lat et lon non egal à 0
-if [[ $vitesse -gt 15 && $intLat -ne 0 && $intLon -ne 0 ]]
+#Vérification du fix
+fix=`bash ./get_fix`
+if [[ $fix -eq 1 ]]
 then
-mysql -uroot -pbananapi -e "INSERT INTO \`Voiture\`.\`kilometre\` (\`Date\`,\`longitude\`, \`latitude\`,\`altitude\`,\`vitesse\`,\`interieur\`,\`exterieur\`,\`kilometre_cumule\`,\`Nord\`,\`Depart\`,\`Arrivee\`,\`essence\`,\`kilometre_cumule_essence\`,\`id_trajet\`,\`id_conducteur\`) VALUES (\"$date\",\"$new_longitude\", \"$new_latitude\",\"$altitude\",\"$vitesse\",\"$interieur\",\"$exterieur\",\"$kilometre_cumule\",\"$nord\",\"$depart\",\"$arrivee\",\"$essence\",\"$kilometre_cumule_essence\",\"$id_trajet\",\"$id_conducteur\");"
+    vitesse=`mysql -uroot -pbananapi -se "SELECT vitesse FROM Voiture.Instantane;"`
+	#echo $vitesse
+	if [[ $vitesse -gt 15 ]]
+	then
+		#Réccupération des dernières données de géolocalisation
+		previous_latitude=`mysql -uroot -pbananapi -se "SELECT latitude FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
+		previous_longitude=`mysql -uroot -pbananapi -se "SELECT longitude FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
+
+		
+		
+		#Réccupération des nouvelles coordonnées depuis le GPS
+		new_latitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f7 | cut -d: -f2 | cut -c 1-7 | head -1`
+		new_longitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f8 | cut -d: -f2 | cut -c 1-7 | head -1`
+		altitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f9 | cut -d ":" -f2 | cut -d "." -f1 | head -1`
+		nord=80
+		date=`date "+%F %T"`
+
+		#Réccupération des données en base
+		previous_kil_essence=10
+		id_conducteur=`mysql -uroot -pbananapi -se "SELECT Conducteur_en_cours FROM Voiture.Instantane;"`
+		id_trajet=`mysql -uroot -pbananapi -se "SELECT Trajet_en_cours FROM Voiture.Instantane;"`
+		depart=1
+		arrivee=0
+		essence=0
+
+		#Réccupération des températures
+		interieur=26
+		exterieur=30
+
+		#new_latitude=46.7752 	
+		#new_longitude=4.86894
+		
+		#Fonction PHP qui calcul la distance parcouru entre le point précedent et l'actuel
+		kilometre_cumule=`/usr/bin/php -f gps_php.php $previous_latitude $previous_longitude $new_latitude $new_longitude`
+		#kilometre_cumule=`/usr/bin/php -f gps_php.php $previous_latitude $previous_longitude 0 0`
+		#echo $kilometre_cumule
+
+		# Calcul du kilometre cumulé.
+		previous_kil=`mysql -uroot -pbananapi -se "SELECT kilometre_cumule FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
+		#previous_kil_essence=`mysql -uroot -pbananapi -se "SELECT kilometre_cumule_essence FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
+
+		#previous_kil=10
+		previous_kil_essence=10
+		
+		
+		kilometre_cumule=`echo "$kilometre_cumule + $previous_kil" | bc -l`
+		#echo $kilometre_cumule
+		kilometre_cumule_essence=`echo "$kilometre_cumule + $previous_kil_essence" | bc -l`
+
+		# Conversion des float en int pour comparaison futur
+		
+		intLon=${new_longitude%.*}
+		#echo $intLon
+		intLat=${new_latitude%.*}
+		#echo $intLat
+
+		#Ajoute en base la nouvelle entrée si lat et lon non egal à 0
+		if [[ $intLat -ne 0 && $intLon -ne 0 ]]
+		then
+		mysql -uroot -pbananapi -e "INSERT INTO \`Voiture\`.\`kilometre\` (\`Date\`,\`longitude\`, \`latitude\`,\`altitude\`,\`vitesse\`,\`interieur\`,\`exterieur\`,\`kilometre_cumule\`,\`Nord\`,\`Depart\`,\`Arrivee\`,\`essence\`,\`kilometre_cumule_essence\`,\`id_trajet\`,\`id_conducteur\`) VALUES (\"$date\",\"$new_longitude\", \"$new_latitude\",\"$altitude\",\"$vitesse\",\"$interieur\",\"$exterieur\",\"$kilometre_cumule\",\"$nord\",\"$depart\",\"$arrivee\",\"$essence\",\"$kilometre_cumule_essence\",\"$id_trajet\",\"$id_conducteur\");"
+		#echo "done!"
+		fi
+	fi
+else
+	echo "pas de fix"
 fi
