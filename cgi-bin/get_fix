@@ -1,6 +1,6 @@
 #!/bin/bash
 GPSDATA=`gpspipe -w | head -5 | grep TPV | cut -d, -f8 | cut -d: -f2 | cut -d. -f1 | head -1`
-if [[ GPSDATA -gt 0 ]]
+if [[ $GPSDATA -gt 0 ]]
 then
 	echo "1"
 else

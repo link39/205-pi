@@ -2,6 +2,7 @@
 
 #Vérification du fix
 fix=`bash ./get_fix`
+#echo $fix
 if [[ $fix -eq 1 ]]
 then
     vitesse=`mysql -uroot -pbananapi -se "SELECT vitesse FROM Voiture.Instantane;"`
