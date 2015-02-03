@@ -56,7 +56,7 @@ if __name__ == '__main__':
 		except:
 			# Rollback in case there is any error
 			db.rollback()		
-		time.sleep(1) #set to whatever
+		time.sleep(0.5) #set to whatever
  
   except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
     print "\nKilling Thread..."

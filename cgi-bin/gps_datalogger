@@ -2,19 +2,17 @@
 
 #Vérification du fix
 fix=`bash /var/www/cgi-bin/get_fix`
-echo $fix
+#echo $fix
 if [[ $fix -eq 1 ]]
 then
     vitesse=`mysql -uroot -pbananapi -se "SELECT vitesse FROM Voiture.Instantane;"`
-	echo $vitesse
+	#echo $vitesse
 	if [[ $vitesse -gt 15 ]]
 	then
-		echo "done!"
+		#echo "done!"
 		#Réccupération des dernières données de géolocalisation
 		previous_latitude=`mysql -uroot -pbananapi -se "SELECT latitude FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
 		previous_longitude=`mysql -uroot -pbananapi -se "SELECT longitude FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
-
-		
 		
 		#Réccupération des nouvelles coordonnées depuis le GPS
 		new_latitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f7 | cut -d: -f2 | cut -c 1-7 | head -1`
@@ -32,7 +30,8 @@ then
 		essence=0
 
 		#Réccupération des températures
-		interieur=26
+		interieur=`cat /sys/bus/w1/devices/28-0414512fb7ff/w1_slave | grep t= | cut -d "=" -f2 | cut -c1-2`
+		#echo $interieur
 		exterieur=30
 
 		#new_latitude=47.7752 	
@@ -41,33 +40,33 @@ then
 		#Fonction PHP qui calcul la distance parcouru entre le point précedent et l'actuel
 		kilometre_cumule=`/usr/bin/php -f gps_php.php $previous_latitude $previous_longitude $new_latitude $new_longitude`
 		#kilometre_cumule=`/usr/bin/php -f gps_php.php $previous_latitude $previous_longitude 0 0`
-		echo $kilometre_cumule
+		#echo $kilometre_cumule
 
 		# Calcul du kilometre cumulé.
 		previous_kil=`mysql -uroot -pbananapi -se "SELECT kilometre_cumule FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
 		#previous_kil=0
 		previous_kil_essence=`mysql -uroot -pbananapi -se "SELECT kilometre_cumule_essence FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
-		echo $previous_kil
+		#echo $previous_kil
 		#previous_kil=10
 		#previous_kil_essence=10
 		
 		
 		kilometre_cumule=`echo "$kilometre_cumule + $previous_kil" | bc -l`
-		echo $kilometre_cumule
+		#echo $kilometre_cumule
 		kilometre_cumule_essence=`echo "$kilometre_cumule + $previous_kil_essence" | bc -l`
 
 		# Conversion des float en int pour comparaison futur
 		
 		intLon=${new_longitude%.*}
-		echo $intLon
+		#echo $intLon
 		intLat=${new_latitude%.*}
-		echo $intLat
+		#echo $intLat
 
 		#Ajoute en base la nouvelle entrée si lat et lon non egal à 0
 		if [[ $intLat -ne 0 && $intLon -ne 0 ]]
-		then
-		mysql -uroot -pbananapi -e "INSERT INTO \`Voiture\`.\`kilometre\` (\`Date\`,\`longitude\`, \`latitude\`,\`altitude\`,\`vitesse\`,\`interieur\`,\`exterieur\`,\`kilometre_cumule\`,\`Nord\`,\`Depart\`,\`Arrivee\`,\`essence\`,\`kilometre_cumule_essence\`,\`id_trajet\`,\`id_conducteur\`) VALUES (\"$date\",\"$new_longitude\", \"$new_latitude\",\"$altitude\",\"$vitesse\",\"$interieur\",\"$exterieur\",\"$kilometre_cumule\",\"$nord\",\"$depart\",\"$arrivee\",\"$essence\",\"$kilometre_cumule_essence\",\"$id_trajet\",\"$id_conducteur\");"
-		echo "done!"
+			then
+			mysql -uroot -pbananapi -e "INSERT INTO \`Voiture\`.\`kilometre\` (\`Date\`,\`longitude\`, \`latitude\`,\`altitude\`,\`vitesse\`,\`interieur\`,\`exterieur\`,\`kilometre_cumule\`,\`Nord\`,\`Depart\`,\`Arrivee\`,\`essence\`,\`kilometre_cumule_essence\`,\`id_trajet\`,\`id_conducteur\`) VALUES (\"$date\",\"$new_longitude\", \"$new_latitude\",\"$altitude\",\"$vitesse\",\"$interieur\",\"$exterieur\",\"$kilometre_cumule\",\"$nord\",\"$depart\",\"$arrivee\",\"$essence\",\"$kilometre_cumule_essence\",\"$id_trajet\",\"$id_conducteur\");"
+			#echo "done!"
 		fi
 	fi
 else
