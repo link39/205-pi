@@ -16,7 +16,7 @@
     <link href="/css/starter-template.css" rel="stylesheet">
 	
 	<script type="text/javascript">
-		setInterval("lire_vitesse();",1000); 
+		setInterval("lire_vitesse();",800); 
 		function lire_vitesse(){
 			$('#ajax').load("/cgi-bin/lire_vitesse");
 		};	
@@ -33,6 +33,14 @@
 			$('#tempsConduiteTemp').load("/cgi-bin/tempsConduite");
 			tempsConduite = $('#tempsConduiteTemp').html();
 			$('#tempsConduite').attr('value',tempsConduite.trim());
+		};	
+    </script>
+	
+	<script type="text/javascript">
+		setInterval("dateHeure();",60000); 
+		function dateHeure(){
+			$('#dateHeure').load("/cgi-bin/dateHeure-court");
+			$('#tempInt').load("/cgi-bin/tempInt");
 		};	
     </script>
 	
@@ -70,8 +78,10 @@
 		// Update du trajet en cours
 		$sql2 = "UPDATE Instantane SET Trajet_en_cours=".$id."";
 		$bdd->exec($sql2);		
-		
 
+		$lat = shell_exec('cgi-bin/get_lat');		
+		$lon = shell_exec('cgi-bin/get_lon');
+		
 		echo '<div class="alert alert-info">
 			<button class="close" data-dismiss="alert" type="button">x</button>
 			Ajouté avec succès !
@@ -97,6 +107,8 @@
             <li><a href="carnet.php">Carnet de bord</a></li>
             <li><a href="consommation.php">Consommation</a></li>
             <li><a href="map.php">Carte</a></li>
+			<li><a id="dateHeure">Heure</a></li>
+			<li><a id="tempInt">Temp</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>

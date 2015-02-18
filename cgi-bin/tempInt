@@ -1,0 +1,6 @@
+#!/bin/bash
+cat <<END
+Content-Type: text/plain
+
+END
+echo `cat /sys/bus/w1/devices/28-0414512fb7ff/w1_slave | grep t= | cut -d "=" -f2 | cut -c1-2`
