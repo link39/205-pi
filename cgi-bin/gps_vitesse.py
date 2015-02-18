@@ -40,23 +40,23 @@ if __name__ == '__main__':
     while True:
       #It may take a second or two to get good data
       #print gpsd.fix.latitude,', ',gpsd.fix.longitude,'  Time: ',gpsd.utc
-		os.system('clear')
-		# print gpsd.fix.speed
-		speed = round(gpsd.fix.speed * 3.6)
-		# print speed
-	  # Prepare SQL query to INSERT a record into the database.
-		sqlUpdate = "UPDATE Instantane SET vitesse=%s" % (speed)
+        os.system('clear')
+        print gpsd.fix.speed
+        speed = round(gpsd.fix.speed * 3.6)
+        # print speed
+      # Prepare SQL query to INSERT a record into the database.
+        sqlUpdate = "UPDATE Instantane SET vitesse=%s" % (speed)
         
-		try:
-			# Execute the SQL command
-			cursor.execute(sqlUpdate)
-			# Commit your changes in the database
-			db.commit()
-			
-		except:
-			# Rollback in case there is any error
-			db.rollback()		
-		time.sleep(0.5) #set to whatever
+        try:
+            # Execute the SQL command
+            cursor.execute(sqlUpdate)
+            # Commit your changes in the database
+            db.commit()
+            
+        except:
+            # Rollback in case there is any error
+            db.rollback()		
+        time.sleep(0.8) #set to whatever
  
   except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
     print "\nKilling Thread..."
