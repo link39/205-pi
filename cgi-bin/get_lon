@@ -1,3 +1,0 @@
-#!/bin/bash
-GPSDATA=`gpspipe -w | head -5 | grep TPV | cut -d, -f8 | cut -d: -f2 | cut -c 1-7 | head -1`
-echo $GPSDATA

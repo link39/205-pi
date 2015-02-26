@@ -1,56 +1,44 @@
 #!/bin/bash
 
-#Vérification du fix
+# Vérification du fix
 fix=`bash /var/www/cgi-bin/get_fix`
-#echo $fix
 if [[ $fix -eq 1 ]]
 then
     vitesse=`mysql -uroot -pbananapi -se "SELECT vitesse FROM Voiture.Instantane;"`
-	#echo $vitesse
 	if [[ $vitesse -gt 15 ]]
 	then
-		#echo "done!"
-		#Réccupération des dernières données de géolocalisation
+		# Réccupération des dernières données de géolocalisation
 		previous_latitude=`mysql -uroot -pbananapi -se "SELECT latitude FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
 		previous_longitude=`mysql -uroot -pbananapi -se "SELECT longitude FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
 		
-		#Réccupération des nouvelles coordonnées depuis le GPS
+		# Réccupération des nouvelles données GPS
         new_latitude=`mysql -uroot -pbananapi -se "SELECT latitude FROM Voiture.Instantane ORDER BY Id DESC LIMIT 1;"`
         new_longitude=`mysql -uroot -pbananapi -se "SELECT longitude FROM Voiture.Instantane ORDER BY Id DESC LIMIT 1;"`
         altitude=`mysql -uroot -pbananapi -se "SELECT altitude FROM Voiture.Instantane ORDER BY Id DESC LIMIT 1;"`
         nord=`mysql -uroot -pbananapi -se "SELECT track FROM Voiture.Instantane ORDER BY Id DESC LIMIT 1;"`
+        date=`mysql -uroot -pbananapi -se "SELECT longitude FROM Voiture.Instantane ORDER BY Id DESC LIMIT 1;"`
         
-		#new_latitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f7 | cut -d: -f2 | cut -c 1-7 | head -1`
-		#new_longitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f8 | cut -d: -f2 | cut -c 1-7 | head -1`
-		#altitude=`gpspipe -w | head -5 | grep TPV | cut -d, -f9 | cut -d ":" -f2 | cut -d "." -f1 | head -1`
-		
-        #nord=80
-		
-
-		#Réccupération des données en base
-		previous_kil_essence=10
+		# Réccupération des données conducteur
 		id_conducteur=`mysql -uroot -pbananapi -se "SELECT Conducteur_en_cours FROM Voiture.Instantane;"`
 		id_trajet=`mysql -uroot -pbananapi -se "SELECT Trajet_en_cours FROM Voiture.Instantane;"`
 		Pays=`mysql -uroot -pbananapi -se "SELECT Pays FROM Voiture.Instantane;"`
+        
+        # Essence
+        previous_kil_essence=10
+        essence=0
+        
+        # Kilometres
 		depart=1
 		arrivee=0
-		essence=0
+		 
 		
-		#Calcul de la date
-        date=`mysql -uroot -pbananapi -se "SELECT longitude FROM Voiture.Instantane ORDER BY Id DESC LIMIT 1;"`
-		
-		#Réccupération des températures
+		# Réccupération des températures
 		interieur=`cat /sys/bus/w1/devices/28-0414512fb7ff/w1_slave | grep t= | cut -d "=" -f2 | cut -c1-2`
-		#echo $interieur
 		exterieur=30
 
-		#new_latitude=47.7752 	
-		#new_longitude=4.86894
 		
 		#Fonction PHP qui calcul la distance parcouru entre le point précedent et l'actuel
-		kilometre_cumule=`/usr/bin/php -f /var/www/cgi-bin/gps_php.php $previous_latitude $previous_longitude $new_latitude $new_longitude`
-		#kilometre_cumule=`/usr/bin/php -f /var/www/cgi-bin/gps_php.php $previous_latitude $previous_longitude 0 0`
-		#echo $kilometre_cumule
+		distance=`/usr/bin/php -f /var/www/cgi-bin/gps_php.php $previous_latitude $previous_longitude $new_latitude $new_longitude`
 
 		# Calcul du kilometre cumulé.
 		previous_kil=`mysql -uroot -pbananapi -se "SELECT kilometre_cumule FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
@@ -60,8 +48,7 @@ then
 		#previous_kil=10
 		#previous_kil_essence=10
 		
-		
-		kilometre_cumule=`echo "$kilometre_cumule + $previous_kil" | bc -l`
+		kilometre_cumule=`echo "$distance + $previous_kil" | bc -l`
 		#echo $kilometre_cumule
 		kilometre_cumule_essence=`echo "$kilometre_cumule + $previous_kil_essence" | bc -l`
 
