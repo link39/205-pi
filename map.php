@@ -139,7 +139,7 @@
           var point = new google.maps.LatLng(
               parseFloat(departs[i].getAttribute("lat")),
               parseFloat(departs[i].getAttribute("lng")));
-	      var html = "<b>Départ le " + date + "</b><br/><br/>";
+	      var html = "<b>Départ le " + date + "<br/>";
           var depart = new google.maps.Marker({
             map: map,
             position: point,
@@ -160,7 +160,7 @@
           var point = new google.maps.LatLng(
               parseFloat(arrives[i].getAttribute("lat")),
               parseFloat(arrives[i].getAttribute("lng")));
-	      var html = "<b>Départ le " + date + "</b><br/><br/>";
+	      var html = "<b>Arrivé le " + date + "</b>";
           var arrive = new google.maps.Marker({
             map: map,
             position: point,
