@@ -11,6 +11,7 @@ import threading
 import MySQLdb
 import math
 import numpy as np
+import dateutil.parser
 
 # Open database connection
 db = MySQLdb.connect("localhost","root","bananapi","Voiture" )
@@ -38,15 +39,22 @@ class GpsPoller(threading.Thread):
 if __name__ == '__main__':
     gpsp = GpsPoller() # create the thread
     try:
+        time.sleep(3)
         gpsp.start() # start it up
         while True:
             os.system('clear')
-            time.sleep(3)
             #print gpsd.fix.latitude
-            fix = int(round(gpsd.fix.latitude))
-            print fix
-            if fix == 0:
-                print "Pas de fix"
+            #print gpsd.satellites
+            #print gpsd.fix.mode
+            #x=float(gpsd.fix.latitude)
+            #x = gpsd.fix.latitude
+            #fix = math.isnan(x)
+            fix = gpsd.fix.mode
+            #fix = int(round(gpsd.fix.latitude))
+            #print fix
+            #if fix or gpsd.fix.latitude == "0.0" or gpsd.fix.latitude == "nan":
+            if fix == 1:          
+                #print "Pas de fix"
                 sqlUpdate = "UPDATE Instantane SET fix=0"
                 try:
                     # Execute the SQL command
@@ -63,12 +71,10 @@ if __name__ == '__main__':
                 timegps = gpsd.utc
                 altitude = int(round(gpsd.fix.altitude))
                 track = int(round(gpsd.fix.track))
-                print latitude
-                print longitude
-                print altitude
-                print track
-                sqlUpdate = "UPDATE Instantane SET latitude=%s, longitude=%s, altitude=%s,track=%s,fix=%s" % (latitude,longitude,altitude,track,1)
-                # print speed
+                vitesse = round(gpsd.fix.speed * 3.6)
+                dateiso = gpsd.utc
+                dateparse = dateutil.parser.parse(dateiso)
+                sqlUpdate = "UPDATE Instantane SET latitude='%s', longitude='%s', altitude='%s',track='%s',time='%s',vitesse='%s',fix='%s'" % (latitude,longitude,altitude,track,dateparse,vitesse,1)
                 try:
                     # Execute the SQL command
                     cursor.execute(sqlUpdate)
@@ -78,7 +84,7 @@ if __name__ == '__main__':
                     # Rollback in case there is any error
                     print "erreur"
                     db.rollback()
-            time.sleep(7)
+            time.sleep(1)
     except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
         print "\nKilling Thread..."
         gpsp.running = False

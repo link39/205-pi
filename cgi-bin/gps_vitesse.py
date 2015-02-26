@@ -41,7 +41,8 @@ if __name__ == '__main__':
       #It may take a second or two to get good data
       #print gpsd.fix.latitude,', ',gpsd.fix.longitude,'  Time: ',gpsd.utc
         os.system('clear')
-        print gpsd.fix.speed
+        #print gpsd.fix.speed
+        #print gpsd.utc
         speed = round(gpsd.fix.speed * 3.6)
         # print speed
       # Prepare SQL query to INSERT a record into the database.
@@ -56,7 +57,7 @@ if __name__ == '__main__':
         except:
             # Rollback in case there is any error
             db.rollback()		
-        time.sleep(0.8) #set to whatever
+        #time.sleep(0.8) #set to whatever
  
   except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
     print "\nKilling Thread..."

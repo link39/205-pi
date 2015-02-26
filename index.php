@@ -37,7 +37,7 @@
     </script>
 	
 	<script type="text/javascript">
-		setInterval("dateHeure();",60000); 
+		setInterval("dateHeure();",5000); 
 		function dateHeure(){
 			$('#dateHeure').load("/cgi-bin/dateHeure-court");
 			$('#tempInt').load("/cgi-bin/tempInt");
