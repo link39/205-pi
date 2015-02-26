@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Vérification du fix
-fix=`bash /var/www/cgi-bin/get_fix`
+fix=`bash /var/www/cgi-bin/gps/get_fix`
 if [[ $fix -eq 1 ]]
 then
     vitesse=`mysql -uroot -pbananapi -se "SELECT vitesse FROM Voiture.Instantane;"`
@@ -15,6 +15,7 @@ then
         new_latitude=`mysql -uroot -pbananapi -se "SELECT latitude FROM Voiture.Instantane ORDER BY Id DESC LIMIT 1;"`
         new_longitude=`mysql -uroot -pbananapi -se "SELECT longitude FROM Voiture.Instantane ORDER BY Id DESC LIMIT 1;"`
         altitude=`mysql -uroot -pbananapi -se "SELECT altitude FROM Voiture.Instantane ORDER BY Id DESC LIMIT 1;"`
+        echo $altitude
         nord=`mysql -uroot -pbananapi -se "SELECT track FROM Voiture.Instantane ORDER BY Id DESC LIMIT 1;"`
         date=`mysql -uroot -pbananapi -se "SELECT longitude FROM Voiture.Instantane ORDER BY Id DESC LIMIT 1;"`
         
@@ -38,8 +39,8 @@ then
 
 		
 		#Fonction PHP qui calcul la distance parcouru entre le point précedent et l'actuel
-		distance=`/usr/bin/php -f /var/www/cgi-bin/gps_php.php $previous_latitude $previous_longitude $new_latitude $new_longitude`
-
+		distance=`/usr/bin/php -f /var/www/cgi-bin/gps/gps_php.php $previous_latitude $previous_longitude $new_latitude $new_longitude`
+        #echo $distance
 		# Calcul du kilometre cumulé.
 		previous_kil=`mysql -uroot -pbananapi -se "SELECT kilometre_cumule FROM Voiture.kilometre ORDER BY Id DESC LIMIT 1;"`
 		#previous_kil=0
@@ -50,7 +51,7 @@ then
 		
 		kilometre_cumule=`echo "$distance + $previous_kil" | bc -l`
 		#echo $kilometre_cumule
-		kilometre_cumule_essence=`echo "$kilometre_cumule + $previous_kil_essence" | bc -l`
+		kilometre_cumule_essence=`echo "$distance + $previous_kil_essence" | bc -l`
 
 		# Conversion des float en int pour comparaison futur
 		

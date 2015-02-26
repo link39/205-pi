@@ -16,9 +16,9 @@
     <link href="/css/starter-template.css" rel="stylesheet">
 	
 	<script type="text/javascript">
-		setInterval("lire_vitesse();",800); 
+		setInterval("lire_vitesse();",1000); 
 		function lire_vitesse(){
-			$('#ajax').load("/cgi-bin/lire_vitesse");
+			$('#ajax').load("/cgi-bin/gps/lire_vitesse");
 		};	
     </script>
 	
@@ -26,11 +26,11 @@
 		var photo;
 		setInterval("conducteur();",5000); 
 		function conducteur(){
-			$('#Nconducteur').load("/cgi-bin/conducteur_nom");
-			$('#PconducteurTemp').load("/cgi-bin/conducteur_photo");
+			$('#Nconducteur').load("/cgi-bin/conducteur/conducteur_nom");
+			$('#PconducteurTemp').load("/cgi-bin/conducteur/conducteur_photo");
 			photo = $('#PconducteurTemp').html();
 			$('#Pconducteur').attr('src', photo);
-			$('#tempsConduiteTemp').load("/cgi-bin/tempsConduite");
+			$('#tempsConduiteTemp').load("/cgi-bin/conducteur/tempsConduite");
 			tempsConduite = $('#tempsConduiteTemp').html();
 			$('#tempsConduite').attr('value',tempsConduite.trim());
 		};	
@@ -39,8 +39,8 @@
 	<script type="text/javascript">
 		setInterval("dateHeure();",5000); 
 		function dateHeure(){
-			$('#dateHeure').load("/cgi-bin/dateHeure-court");
-			$('#tempInt').load("/cgi-bin/tempInt");
+			$('#dateHeure').load("/cgi-bin/gps/dateHeure-court");
+			$('#tempInt').load("/cgi-bin/temperature/tempInt");
 		};	
     </script>
 	

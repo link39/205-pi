@@ -25,6 +25,12 @@
       },
 	  essence: {
         icon: '/img/essence.png'
+      },
+      depart: {
+        icon: '/img/depart.jpg'
+      },
+      arrive: {
+        icon: '/img/arrive.png'
       }
     };
 
@@ -121,6 +127,48 @@
           bindInfoWindow(essence, map, infoWindow, html);
         }
       });
+      
+      // Change this depending on the name of your PHP file
+      downloadUrl("mapXMLdepart.php?id=<?php echo $_GET['Trajet']?>", function(data) {
+        var xmlDepart = data.responseXML;
+        var departs = xmlDepart.documentElement.getElementsByTagName("depart");
+        for (var i = 0; i < departs.length; i++) {
+	      var type = "depart";
+          var date = departs[i].getAttribute("date");
+		  var icon = customIcons[type] || {};
+          var point = new google.maps.LatLng(
+              parseFloat(departs[i].getAttribute("lat")),
+              parseFloat(departs[i].getAttribute("lng")));
+	      var html = "<b>Départ le " + date + "</b><br/><br/>";
+          var depart = new google.maps.Marker({
+            map: map,
+            position: point,
+            icon: icon.icon
+          });
+          bindInfoWindow(depart, map, infoWindow, html);
+        }
+      });
+      
+      // Change this depending on the name of your PHP file
+      downloadUrl("mapXMLarrive.php?id=<?php echo $_GET['Trajet']?>", function(data) {
+        var xmlArrive = data.responseXML;
+        var arrives = xmlArrive.documentElement.getElementsByTagName("arrive");
+        for (var i = 0; i < arrives.length; i++) {
+	      var type = "arrive";
+          var date = arrives[i].getAttribute("date");
+		  var icon = customIcons[type] || {};
+          var point = new google.maps.LatLng(
+              parseFloat(arrives[i].getAttribute("lat")),
+              parseFloat(arrives[i].getAttribute("lng")));
+	      var html = "<b>Départ le " + date + "</b><br/><br/>";
+          var arrive = new google.maps.Marker({
+            map: map,
+            position: point,
+            icon: icon.icon
+          });
+          bindInfoWindow(arrive, map, infoWindow, html);
+        }
+      });
     }
 
     function bindInfoWindow(marker, map, infoWindow, html) {
@@ -134,6 +182,13 @@
       google.maps.event.addListener(essence, 'click', function() {
         infoWindow.setContent(html);
         infoWindow.open(map, essence);
+      });
+    }
+    
+    function bindInfoWindow(depart, map, infoWindow, html) {
+      google.maps.event.addListener(depart, 'click', function() {
+        infoWindow.setContent(html);
+        infoWindow.open(map, depart);
       });
     }
 
