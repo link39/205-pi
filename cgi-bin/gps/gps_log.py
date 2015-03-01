@@ -11,7 +11,7 @@ import MySQLdb
 import dateutil.parser
 
 # Open database connection
-db = MySQLdb.connect("localhost","root","bananapi","Voiture" )
+db = MySQLdb.connect("localhost","root","bananapi","bdc" )
 
 # prepare a cursor object using cursor() method
 cursor = db.cursor()

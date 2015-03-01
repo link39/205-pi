@@ -2,7 +2,7 @@
 
 $username="root";
 $password="bananapi";
-$database="Voiture";
+$database="bdc";
 
 // Start XML file, create parent node
 

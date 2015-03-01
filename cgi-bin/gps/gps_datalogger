@@ -17,7 +17,7 @@ then
         altitude=`mysql -uroot -pbananapi -se "SELECT altitude FROM bdc.Instantane ORDER BY Id DESC LIMIT 1;"`
         echo $altitude
         nord=`mysql -uroot -pbananapi -se "SELECT track FROM bdc.Instantane ORDER BY Id DESC LIMIT 1;"`
-        date=`mysql -uroot -pbananapi -se "SELECT longitude FROM bdc.Instantane ORDER BY Id DESC LIMIT 1;"`
+        date=`mysql -uroot -pbananapi -se "SELECT time FROM bdc.Instantane ORDER BY Id DESC LIMIT 1;"`
         
 		# Réccupération des données conducteur
 		id_conducteur=`mysql -uroot -pbananapi -se "SELECT Conducteur_en_cours FROM bdc.Instantane;"`

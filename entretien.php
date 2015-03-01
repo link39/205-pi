@@ -28,7 +28,7 @@
 	 if(isset($_GET['description'])&&($_GET['date'])&&($_GET['kilometre'])&&($_GET['categorie'])){
 		try
 		{
-			$bdd = new PDO('mysql:host=localhost;dbname=Voiture', 'root', 'bananapi');
+			$bdd = new PDO('mysql:host=localhost;dbname=bdc', 'root', 'bananapi');
 		}
 		catch(Exception $e)
 		{
@@ -57,7 +57,7 @@
 	if(isset($_GET['delete'])){
 			try
 			{
-				$bdd = new PDO('mysql:host=localhost;dbname=Voiture', 'root', 'bananapi');
+				$bdd = new PDO('mysql:host=localhost;dbname=bdc', 'root', 'bananapi');
 			}
 			catch(Exception $e)
 			{
@@ -115,7 +115,7 @@
 			<?php
 			try
 			{
-				$bdd = new PDO('mysql:host=localhost;dbname=Voiture', 'root', 'bananapi');
+				$bdd = new PDO('mysql:host=localhost;dbname=bdc', 'root', 'bananapi');
 			}
 			catch(Exception $e)
 			{

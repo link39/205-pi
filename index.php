@@ -54,7 +54,7 @@
 	if(isset($_GET['nom']) || ($_GET['nom']) && ($_GET['description'])){
 		try
 		{
-			$bdd = new PDO('mysql:host=localhost;dbname=Voiture', 'root', 'bananapi');
+			$bdd = new PDO('mysql:host=localhost;dbname=bdc', 'root', 'bananapi');
 		}
 		catch(Exception $e)
 		{
