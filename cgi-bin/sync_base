@@ -1,0 +1,7 @@
+#!/bin/bash
+pt-table-sync --execute --user bdc --password 205AfricaRaid --table Conducteur,carnet,Instantane,trajet,entretien,kilometre,location,record,test localhost bdc.sql-pro.online.net
+cat <<END
+Content-Type: text/plain
+
+END
+echo "Synchronisation lancé";

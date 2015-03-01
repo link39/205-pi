@@ -1,3 +1,3 @@
 #!/bin/bash
 # Passage à 0 du temps de conduite
-mysql -uroot -pbananapi -se "UPDATE Voiture.Instantane SET temps_conduite=0;"
+mysql -uroot -pbananapi -se "UPDATE bdc.Instantane SET temps_conduite=0;"

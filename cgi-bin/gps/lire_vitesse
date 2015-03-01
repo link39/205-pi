@@ -3,5 +3,5 @@ cat <<END
 Content-Type: text/plain
 
 END
-vitesse=`mysql -uroot -pbananapi -se "SELECT vitesse FROM Voiture.Instantane;"`
+vitesse=`mysql -uroot -pbananapi -se "SELECT vitesse FROM bdc.Instantane;"`
 echo $vitesse;
