@@ -232,21 +232,22 @@
 	}
 
 	$reponse = $bdd->query('SELECT * FROM Trajet');
-    $date1 = $bdd->query('SELECT Date FROM kilometre WHERE id_trajet =41 ORDER BY Id DESC LIMIT 1');
-    $date2 = $bdd->query('SELECT Date FROM kilometre WHERE id_trajet=41 ORDER by Id LIMIT 1');
+    $date1 = $bdd->query('SELECT Date FROM kilometre WHERE id_trajet ='.$_GET['Trajet'].' ORDER BY Id DESC LIMIT 1');
+    $date2 = $bdd->query('SELECT Date FROM kilometre WHERE id_trajet='.$_GET['Trajet'].' ORDER by Id LIMIT 1');
     while ($donnees = $date1->fetch())
     {
         $dateTop=$donnees['Date'];
+        $dateTop = new DateTime($dateTop);
     }
     while ($donnees = $date2->fetch())
     {
         $dateBottom=$donnees['Date'];
+        $dateBottom = new DateTime($dateBottom);
     }
+    $temps_trajet = $dateBottom->diff($dateTop); 
+
     
-    echo '<script type="text/javascript">window.alert("'.$dateBottom.'");</script>';
-    echo '<script type="text/javascript">window.alert("'.$dateTop.'");</script>';
-    $temps_trajet=date_diff($dateTop,$dateBottom);
-    echo '<script type="text/javascript">window.alert("'.$temps_trajet.'");</script>';
+
 	?>
 	
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -287,7 +288,7 @@
 		</select></p>		 
 		<input type="submit" value="Afficher">
 		</form>
-        <p>Temps trajet : <?php print_r($temps_trajet->format('%y ans %m mois %d jours %h heures %i minutes %s secondes'));  ?></p>
+        <p>Temps trajet : <?php print_r($temps_trajet->format('%h heures %i minutes %s secondes'));  ?></p>
 		
 		<!-- Affichage map -->
 		
