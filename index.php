@@ -41,6 +41,9 @@
 		function dateHeure(){
 			$('#dateHeure').load("/cgi-bin/gps/dateHeure-court");
 			$('#tempInt').load("/cgi-bin/temperature/tempInt");
+            $('#fixTemp').load("/cgi-bin/gps/get_fix_cgi");
+			photoFix = $('#fixTemp').html();
+			$('#Pfix').attr('src', photoFix);
 		};	
     </script>
 	
@@ -77,10 +80,11 @@
 		
 		// Update du trajet en cours
 		$sql2 = "UPDATE Instantane SET Trajet_en_cours=".$id."";
-		$bdd->exec($sql2);		
+		$bdd->exec($sql2);
 
-		$lat = shell_exec('cgi-bin/get_lat');		
-		$lon = shell_exec('cgi-bin/get_lon');
+		// Mise à 0 des kil partiel
+		$sql3 = "UPDATE kilometre SET kilometre_cumule_partiel=0 order by Id desc limit 1";
+		$bdd->exec($sql3);
 		
 		echo '<div class="alert alert-info">
 			<button class="close" data-dismiss="alert" type="button">x</button>
@@ -119,11 +123,13 @@
 		<div>
 			<h1 class="starter-template" id="ajax">Vitesse</h1>
 			</br>
+			<p id="fixTemp" style="display:none;"></p>
 			<p id="Nconducteur"></p>
 			<p id="PconducteurTemp" style="display:none;"></p>
 			<p id="tempsConduiteTemp" style="display:none;"></p>
 			<p><progress id="tempsConduite" value="0" max="100"></progress></p>
 			<img id="Pconducteur" src="" alt="Conducteur" height="64" width="64">
+			<img id="Pfix" src="" alt="fix" height="64" width="64">
 			<button type="button" class="pull-right glyphicon glyphicon-plus btn btn-success" data-toggle="modal" data-target="#myModal" >Ajouter un trajet</button>
 		</div>
     </div><!-- /.container -->

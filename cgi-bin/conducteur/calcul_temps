@@ -10,9 +10,9 @@ ancien_conducteur=`mysql -uroot -pbananapi -se "SELECT Conducteur_en_cours FROM 
 if [[ $cam_conducteur -eq $ancien_conducteur ]]
 then
 	temps=`mysql -uroot -pbananapi -se "SELECT temps_conduite FROM bdc.Instantane ORDER BY Id DESC LIMIT 1;"`
-	echo $temps
+	#echo $temps
 	temps=`echo $temps + 1 | bc -l`
-	echo $temps
+	#echo $temps
 	mysql -uroot -pbananapi -se "UPDATE bdc.Instantane SET temps_conduite=$temps;"
 # Sinon update base Instantanée conducteur en cours et temps = 0
 else

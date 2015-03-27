@@ -24,7 +24,7 @@ if(isset($_GET['id'])){
 
 	// Select all the rows in the markers table
 
-	$query = 'SELECT date,latitude, longitude FROM `kilometre` WHERE id_trajet='.$_GET['id'].' order by id desc limit 1';
+	$query = 'SELECT DATE_ADD(date,INTERVAL 2 HOUR) AS date,latitude, longitude FROM `kilometre` WHERE id_trajet='.$_GET['id'].' order by id desc limit 1';
 
 	$result = mysql_query($query);
 	if (!$result) {

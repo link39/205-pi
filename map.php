@@ -236,7 +236,7 @@
     if(isset($_GET['Trajet'])){
         $date1 = $bdd->query('SELECT Date FROM kilometre WHERE id_trajet ='.$_GET['Trajet'].' ORDER BY Id DESC LIMIT 1');
         $date2 = $bdd->query('SELECT Date FROM kilometre WHERE id_trajet='.$_GET['Trajet'].' ORDER by Id LIMIT 1');
-        $kilometre_trajet = $bdd->query('SELECT kilometre_cumule FROM kilometre WHERE id_trajet='.$_GET['Trajet'].' ORDER by Id DESC LIMIT 1');
+        $kilometre_trajet = $bdd->query('SELECT kilometre_cumule_partiel FROM kilometre WHERE id_trajet='.$_GET['Trajet'].' ORDER by Id DESC LIMIT 1');
         while ($donnees = $date1->fetch())
         {
             $dateTop=$donnees['Date'];
@@ -249,7 +249,7 @@
         }
         while ($donnees = $kilometre_trajet->fetch())
         {
-            $kilometreTrajet=$donnees['kilometre_cumule'];
+            $kilometreTrajet=$donnees['kilometre_cumule_partiel'];
         }
         $temps_trajet = $dateBottom->diff($dateTop); 
     }

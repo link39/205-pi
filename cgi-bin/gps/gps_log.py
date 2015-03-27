@@ -42,7 +42,7 @@ if __name__ == '__main__':
             os.system('clear')
             fix = gpsd.fix.mode
             if fix == 1:          
-                #print "Pas de fix"
+                print "Pas de fix"
                 sqlUpdate = "UPDATE Instantane SET fix=0"
                 try:
                     # Execute the SQL command
@@ -60,9 +60,9 @@ if __name__ == '__main__':
                 altitude = int(round(gpsd.fix.altitude))
                 track = int(round(gpsd.fix.track))
                 vitesse = round(gpsd.fix.speed * 3.6)
-                dateiso = gpsd.utc
-                dateparse = dateutil.parser.parse(dateiso)
-                sqlUpdate = "UPDATE Instantane SET latitude='%s', longitude='%s', altitude='%s',track='%s',time='%s',vitesse='%s',fix='%s'" % (latitude,longitude,altitude,track,dateparse,vitesse,1)
+                dateparse = dateutil.parser.parse(timegps)
+                print dateparse
+		sqlUpdate = "UPDATE Instantane SET latitude='%s', longitude='%s', altitude='%s',track='%s',time='%s',vitesse='%s',fix='%s'" % (latitude,longitude,altitude,track,dateparse,vitesse,1)
                 try:
                     # Execute the SQL command
                     cursor.execute(sqlUpdate)

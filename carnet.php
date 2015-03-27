@@ -32,7 +32,7 @@
 	
     <?php
 	if(isset($_GET['date'])&&($_GET['auteur'])&&($_GET['lieu'])&&($_GET['jour'])&&($_GET['message'])){
-		$fix=shell_exec("/home/pi/get_fix");
+		$fix=shell_exec("/var/www/cgi-bin/gps/get_fix");
 		if($fix==1)
 		{
 			try
