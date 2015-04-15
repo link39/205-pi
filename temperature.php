@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="fr">
@@ -59,48 +60,7 @@
 			</div>
 			<!-- /.panel-heading -->
 			<div class="panel-body">
-				<div id="morris-area-chart"></div>
-				<div class="col-lg-8 col-md-8">
-					<div class="box">
-					<div class="box-header">
-					<h2>tickets</h2>
-					</div>
-					<div class="box-content" style="height:304px">
-					<div id="stats-chart2" class="col-lg-12" style="height: 290px; padding: 0px;">
-					<canvas class="flot-base" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 700px; height: 290px;" width="700" height="290"></canvas>
-					<div class="flot-text" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; font-size: smaller; color: rgb(84, 84, 84);">
-					<div class="flot-x-axis flot-x1-axis xAxis x1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block;">
-					<div class="flot-tick-label tickLabel" style="position: absolute; max-width: 43px; top: 274px; left: 55px; text-align: center;">2</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; max-width: 43px; top: 274px; left: 100px; text-align: center;">4</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; max-width: 43px; top: 274px; left: 145px; text-align: center;">6</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; max-width: 43px; top: 274px; left: 191px; text-align: center;">8</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; max-width: 43px; top: 274px; left: 233px; text-align: center;">10</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; max-width: 43px; top: 274px; left: 279px; text-align: center;">12</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; max-width: 43px; top: 274px; left: 324px; text-align: center;">14</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; max-width: 43px; top: 274px; left: 369px; text-align: center;">16</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; max-width: 43px; top: 274px; left: 415px; text-align: center;">18</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; max-width: 43px; top: 274px; left: 460px; text-align: center;">20</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; max-width: 43px; top: 274px; left: 505px; text-align: center;">22</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; max-width: 43px; top: 274px; left: 551px; text-align: center;">24</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; max-width: 43px; top: 274px; left: 596px; text-align: center;">26</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; max-width: 43px; top: 274px; left: 642px; text-align: center;">28</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; max-width: 43px; top: 274px; left: 687px; text-align: center;">30</div>
-					</div>
-					<div class="flot-y-axis flot-y1-axis yAxis y1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block;">
-					<div class="flot-tick-label tickLabel" style="position: absolute; top: 261px; left: 24px; text-align: right;">0</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; top: 209px; left: 6px; text-align: right;">2500</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; top: 157px; left: 6px; text-align: right;">5000</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; top: 104px; left: 6px; text-align: right;">7500</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; top: 52px; left: 0px; text-align: right;">10000</div>
-					<div class="flot-tick-label tickLabel" style="position: absolute; top: 0px; left: 0px; text-align: right;">12500</div>
-					</div>
-					</div>
-					<canvas class="flot-overlay" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 700px; height: 290px;" width="700" height="290"></canvas>
-					</div>
-					</div>
-					</div>
-					</div>
-				</div>
+				<div id="chartint"></div>
 			</div>
 			<!-- /.panel-body -->
 		</div>
@@ -113,28 +73,38 @@
     <script src="/js/jquery.min.js"></script>
     <script src="/js/jquery-ui.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-	<script>
-		$(function() {
-			$( "#datepicker" ).datepicker({
-				altField: "#datepicker",
-				closeText: 'Fermer',
-				prevText: 'Précédent',
-				nextText: 'Suivant',
-				currentText: 'Aujourd\'hui',
-				monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-				monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
-				dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
-				dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
-				dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-				weekHeader: 'Sem.',
-				dateFormat: 'dd/mm/yy'
-				});
-			}
-		);
-	</script>
+    
 	<!-- Morris Charts JavaScript -->
     <script src="js/plugins/morris/raphael.min.js"></script>
-    <script src="js/plugins/morris/morris.min.js"></script>
-    <script src="js/plugins/morris/morris-data.js"></script>
+    <script src="js/plugins/morris/morris.min.js"></script>    
+    <script>
+        new Morris.Bar({
+          element: 'chartint',
+          data :
+          <?php
+                    try
+                    {
+                        $bdd = new PDO('mysql:host=localhost;dbname=bdc', 'root', 'bananapi');
+                    }
+                    catch(Exception $e)
+                    {
+                            die('Erreur : '.$e->getMessage());
+                    }
+
+                    $reponse = $bdd->query('SELECT Date(Date) AS date,MIN(interieur) as min ,MAX(interieur) AS max FROM kilometre WHERE YEAR(Date) = "2015" GROUP BY Date(Date)');
+                    $rows = array();
+                    while ($donnees = $reponse->fetch())
+                    {	
+                        $rows[] = $donnees;
+                    }
+                    echo json_encode($rows);
+                    $reponse->closeCursor();
+
+        ?>,
+          xkey: 'date',
+          ykeys: ['min', 'max'],
+          labels: ['Min', 'Max']
+});
+    </script> 
   </body>
 </html>

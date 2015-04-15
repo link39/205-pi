@@ -271,7 +271,7 @@
                                 <div>
                                     <strong>Data</strong>
                                     <span class="pull-right text-muted">
-                                        <em id="fixTemp"></em>
+                                        <em id="netTemp"></em>
                                     </span>
                                 </div>
                             </a>
@@ -290,7 +290,7 @@
                                 <div>
                                     <strong>GPS</strong>
                                     <span class="pull-right text-muted">
-                                        <em id="netTemp"></em>
+                                        <em id="">fixTemp</em>
                                     </span>
                                 </div>
                             </a>
