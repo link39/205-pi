@@ -290,7 +290,7 @@
                                 <div>
                                     <strong>GPS</strong>
                                     <span class="pull-right text-muted">
-                                        <em id="">fixTemp</em>
+                                        <em id="fixTemp"></em>
                                     </span>
                                 </div>
                             </a>
