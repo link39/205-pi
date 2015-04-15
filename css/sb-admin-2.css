@@ -8,6 +8,10 @@ body {
     background-color: #f8f8f8;
 }
 
+#temp li {
+  display: inline;
+}
+
 #wrapper {
     width: 100%;
 }
