@@ -18,7 +18,7 @@
     <link href="../bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="css/sb-admin-2.css" rel="stylesheet">
     
     	<!-- Timeline CSS -->
     <link href="css/plugins/timeline.css" rel="stylesheet">
@@ -70,11 +70,17 @@
 		};	
     </script>
         
+    <script>
+        function start(){
+            conducteur();
+            dateHeure();
+        };
+    </script>
   
 
 </head>
 
-<body>
+<body onload="start();">
 
   
     <?php
@@ -195,6 +201,9 @@
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <div id="dateHeure"></div>
+                </li>
                 <li>
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa  fa-signal  fa-fw"></i>  <i class="fa fa-caret-down"></i>

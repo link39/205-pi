@@ -15,7 +15,7 @@ then
         new_latitude=`mysql -uroot -pbananapi -se "SELECT latitude FROM bdc.Instantane ORDER BY Id DESC LIMIT 1;"`
         new_longitude=`mysql -uroot -pbananapi -se "SELECT longitude FROM bdc.Instantane ORDER BY Id DESC LIMIT 1;"`
         altitude=`mysql -uroot -pbananapi -se "SELECT altitude FROM bdc.Instantane ORDER BY Id DESC LIMIT 1;"`
-        echo $altitude
+        
         nord=`mysql -uroot -pbananapi -se "SELECT track FROM bdc.Instantane ORDER BY Id DESC LIMIT 1;"`
         date=`mysql -uroot -pbananapi -se "SELECT time FROM bdc.Instantane ORDER BY Id DESC LIMIT 1;"`
         
@@ -35,7 +35,7 @@ then
 		
 		# Réccupération des températures
 		interieur=`cat /sys/bus/w1/devices/28-0414512fb7ff/w1_slave | grep t= | cut -d "=" -f2 | cut -c1-2`
-		exterieur=30
+		exterieur=cat /sys/bus/w1/devices/28-041450c2a6ff/w1_slave | grep t= | cut -d "=" -f2 | cut -c1-2`
 
 		
 		#Fonction PHP qui calcul la distance parcouru entre le point précedent et l'actuel

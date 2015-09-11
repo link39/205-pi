@@ -18,7 +18,7 @@
     <link href="../bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="css/sb-admin-2.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -48,6 +48,7 @@
     <script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
     <script type="text/javascript" src="js/jqwidgets/jqxdraw.js"></script>
     <script type="text/javascript" src="js/jqwidgets/jqxgauge.js"></script>
+
         
     <script type="text/javascript">
         $(document).ready(function () {         
@@ -82,7 +83,7 @@
                 width: 150,
                 height:150
             });
-            $('#Ext').jqxGauge('value', 20);
+            $('#Ext').jqxGauge('value', 10);
         });
         $(document).ready(function () {         
             $('#Mot').jqxGauge({
@@ -126,15 +127,24 @@
     </script>
 	
 	<script type="text/javascript">
+		setInterval("info_trajet();",10000); 
+		function info_trajet(){
+			$('#kil_trajet').load("/cgi-bin/gps/get_kil_trajet");
+			$('#nom_trajet').load("/cgi-bin/gps/get_name_trajet");
+		};	
+    </script>
+	
+	<script type="text/javascript">
 		setInterval("dateHeure();",30000); 
 		function dateHeure(){
 			$('#dateHeure').load("/cgi-bin/gps/dateHeure-court");
-			tempExt =  $('#Ext').load("/cgi-bin/temperature/tempExt");
-            $('#Ext').jqxGauge({ value: tempExt });
+			tempExt =  $('#Exttemp').load("/cgi-bin/temperature/tempExt");
+            $('#Ext').jqxGauge({ value: tempExt.text() });
 			tempInt = $('#Inttemp').load("/cgi-bin/temperature/tempInt");
-            $('#Int').jqxGauge({ value: tempInt });
+            //$('#Int').jqxGauge({ value: tempInt });
+            $('#Int').jqxGauge({ value: tempInt.text() });
 			tempMot = $('#Mottemp').load("/cgi-bin/temperature/tempMot");
-            $('#Mot').jqxGauge({ value: tempMot });
+            $('#Mot').jqxGauge({ value: tempMot.text() });
             $('#fixTemp').load("/cgi-bin/gps/get_fix_cgi");
             $('#netTemp').load("/cgi-bin/internet/check_internet");
 			/* photoFix = $('#fixTemp').html();
@@ -144,11 +154,23 @@
 		};	
     </script>
         
-  
+    <script>
+        function start(){
+            conducteur();
+            dateHeure();
+            info_trajet();
+        };
+    </script>
+
+    <script>
+	function start_photo(){
+	  $('#photostart').load("/cgi-bin/gopro/gopro_photo");
+	};
+    </script>
 
 </head>
 
-<body>
+<body onload="start();">
 
     <?php
   
@@ -181,6 +203,7 @@
     $sql0 = "SELECT connexion as connexion FROM Instantane order by Id desc limit 1"; 
     foreach  ($bdd->query($sql0) as $row) {
         $connexion = $row['connexion'];
+		//echo '<script type="text/javascript">window.alert("'.$connexion.'");</script>';
     } 
 
     if($connexion=='1'){
@@ -193,9 +216,9 @@
          if($encours==1){
            # Le trajet en cours n'est pas terminé
            echo '<div class="alert alert-warning">
-			<button class="close" data-dismiss="alert" type="button">x</button>
+			<button id="boutonnontermine" class="close" data-dismiss="alert" type="button">x</button>
 			Dernier trajet non termine. 
-			<input id="clickMe" type="button" value="Terminer le trajet" onclick="updateTrajetJS();" />
+			<input id="boutontermine" type="button" value="Terminer le trajet" onclick="updateTrajetJS();" />
 			</div>';
         }
 
@@ -262,6 +285,21 @@
 
             <ul class="nav navbar-top-links navbar-right">
                 <li>
+                    <div id="nom_trajet"></div>
+                </li>
+				<li>
+                    <div id="kil_trajet"></div>
+                </li>
+				<li>
+                    <div id="dateHeure"></div>
+                </li>
+				<li>
+					<a onclick="start_video()"><i class="fa  fa-film  fa-fw"></i></a>
+				</li>
+				<li>
+					<a onclick="start_photo()"><i class="fa  fa-camera  fa-fw"></i></a> 
+				</li>
+                <li>
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa  fa-signal  fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
@@ -316,8 +354,12 @@
                                 <!-- Variable -->
                                 <p id="fixTemp" style="display:none;"></p>
                                 <p id="netTemp" style="display:none;"></p>
+                                <p id="Inttemp" style="display:none;"></p>
+                                <p id="Exttemp" style="display:none;"></p>
+                                <p id="Mottemp" style="display:none;"></p>
                                 <p id="PconducteurTemp" style="display:none;"></p>
                                 <p id="tempsConduiteTemp" style="display:none;"></p>
+				<p id="photostart" style="display:none;"></p>
                                 <ul>
                                     <li style="list-style-type: none;">
                                         <img id="Pconducteur" src="" alt="Conducteur" height="128" width="128">
@@ -415,7 +457,8 @@
     <script>
     function updateTrajetJS(){
      alert("<?PHP updateTrajetPHP(); ?>");
-     document.getElementById(clickMe).style.visibility="hidden";
+     document.getElementById("boutonnontermine").style.visibility="hidden";
+     document.getElementById("boutontermine").style.visibility="hidden";
      }
     </script>
 

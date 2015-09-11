@@ -4,6 +4,10 @@
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
 
+#dateHeure{
+    color: #0B62A4;
+}
+ 
 body {
     background-color: #f8f8f8;
 }

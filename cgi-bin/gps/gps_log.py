@@ -58,10 +58,11 @@ if __name__ == '__main__':
                 longitude = round(gpsd.fix.longitude, 3)
                 timegps = gpsd.utc
                 altitude = int(round(gpsd.fix.altitude))
-                track = int(round(gpsd.fix.track))
-                vitesse = round(gpsd.fix.speed * 3.6)
+                #track = int(round(gpsd.fix.track))
+                track = 0
+		vitesse = round(gpsd.fix.speed * 3.6)
                 dateparse = dateutil.parser.parse(timegps)
-                print dateparse
+                #print dateparse
 		sqlUpdate = "UPDATE Instantane SET latitude='%s', longitude='%s', altitude='%s',track='%s',time='%s',vitesse='%s',fix='%s'" % (latitude,longitude,altitude,track,dateparse,vitesse,1)
                 try:
                     # Execute the SQL command
