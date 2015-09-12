@@ -174,21 +174,6 @@
 
     <?php
   
-    FUNCTION updateTrajetPHP(){
-    #update pour terminé le trajet
-        try
-        {
-            $bdd = new PDO('mysql:host=localhost;dbname=bdc', 'root', 'bananapi');
-        }
-        catch(Exception $e)
-        {
-                die('Erreur : '.$e->getMessage());
-        }
-        $sql = "UPDATE Trajet SET encours=0 order by id_trajet desc limit 1";
-        $bdd->exec($sql);
-        echo 'Trajet terminé!';
-    }
- 
   
     # Vérifie si le dernier trajet est terminé à l'allumage
     try
@@ -213,13 +198,17 @@
         } 
         
         
-         if($encours==1){
+         if($encours=='1'){
+			global $mettreajour;
+			$mettreajour=1;
            # Le trajet en cours n'est pas terminé
-           echo '<div class="alert alert-warning">
-			<button id="boutonnontermine" class="close" data-dismiss="alert" type="button">x</button>
+           echo '<div id="flagnontermine" class="alert alert-warning">
+			<button  class="close" data-dismiss="alert" type="button">x</button>
 			Dernier trajet non termine. 
-			<input id="boutontermine" type="button" value="Terminer le trajet" onclick="updateTrajetJS();" />
+			<input type="button" value="Terminer le trajet" onclick="updateTrajetJS()" />
 			</div>';
+			#echo 'affichedivtrajet();';
+			
         }
 
         #update pour ne plus afficher le message
@@ -263,7 +252,7 @@
 		
 		echo '<div class="alert alert-info">
 			<button class="close" data-dismiss="alert" type="button">x</button>
-			AjoutÃ© avec succÃ¨s !
+			Ajout avec succes !
 			</div>';
 	}
 	?>
@@ -281,7 +270,13 @@
                 </button>
                 <a class="navbar-brand" href="index.php">205-PI</a>
             </div>
-            <!-- /.navbar-header -->
+            <!-- /.navbar-header
+			
+			<div id="divtrajet" style="display:none;" class="alert alert-warning">
+			<button id="boutonnontermine" class="close" data-dismiss="alert" type="button">x</button>
+			Dernier trajet non termine. 
+			<input id="boutontermine" type="button" value="Terminer le trajet" onclick="updateTrajetJS();" />
+			</div>  -->
 
             <ul class="nav navbar-top-links navbar-right">
                 <li>
@@ -456,12 +451,33 @@
      <!-- Script premier démarrage de la PI -->
     <script>
     function updateTrajetJS(){
-     alert("<?PHP updateTrajetPHP(); ?>");
-     document.getElementById("boutonnontermine").style.visibility="hidden";
-     document.getElementById("boutontermine").style.visibility="hidden";
+     alert("<?PHP updateTrajetPHP(); ?>"); 
+     document.getElementById("flagnontermine").style.visibility="hidden";
      }
+	 function affichedivtrajet(){
+		 document.getElementById("divtrajet").style.visibility="visible";
+	 }
     </script>
 
 </body>
-
+<?php
+	    function updateTrajetPHP(){
+    #update pour terminé le trajet
+        try
+        {
+            $bdd = new PDO('mysql:host=localhost;dbname=bdc', 'root', 'bananapi');
+        }
+        catch(Exception $e)
+        {
+                die('Erreur : '.$e->getMessage());
+        }
+		if($GLOBALS['mettreajour']=='1'){
+			$sql = "UPDATE Trajet SET encours=0 order by id_trajet desc limit 1";
+			$bdd->exec($sql);
+			echo "Trajet terminé!";
+		}
+    }
+?>
 </html>
+
+
