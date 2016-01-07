@@ -1,0 +1,9 @@
+#!/bin/bash
+
+ini=`mysql -uroot -pbananapi -se "UPDATE bdc.Instantane SET connexion=1;"`
+
+cat <<END
+Content-Type: text/plain
+
+END
+echo "done"

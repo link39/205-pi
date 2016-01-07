@@ -1,0 +1,8 @@
+#!/bin/bash
+kil=`mysql -uroot -pbananapi -se "SELECT kilometre_cumule_partiel FROM bdc.kilometre ORDER BY Id DESC LIMIT 1;"`
+cat <<END
+Content-Type: text/plain
+
+END
+echo $kil
+

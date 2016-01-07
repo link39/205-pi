@@ -64,9 +64,9 @@
 		};	
     </script>
     
-	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true&v=3"></script>
     <script type="text/javascript">
-    //<![CDATA[
+   
 
     var customIcons = {
       message: {
@@ -82,7 +82,7 @@
         icon: '/img/arrive.png'
       }
     };
-
+	function test(){};
     function load() {
 	
       var map = new google.maps.Map(document.getElementById("map"), {
@@ -115,8 +115,14 @@
 		  flightPlanCoordinates[i] = point;
         }
       });
+	  
+ /* 	  <?php
+	  sleep(2)
+	  ?>   */
 	  alert("Bienvenue !");
-      setTimeout(test(),10000);
+	  /*  alert("Bienvenue !");  */
+
+    // setTimeout(test(),1000);
    	  var flightPath = new google.maps.Polyline({
 		path: flightPlanCoordinates,
 		geodesic: true,
@@ -124,7 +130,7 @@
 		strokeOpacity: 1.0,
 		strokeWeight: 2
 	  });
-
+		
 	  flightPath.setMap(map);
 
 

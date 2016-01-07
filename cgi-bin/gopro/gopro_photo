@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Choisi le mode photo
+wget --delete-after "http://10.5.5.9/camera/CM?t=ptitloup&p=%01" -q
+
+# Attendre un peu
+sleep 1
+
+# Prendre une photo
+wget --delete-after "http://10.5.5.9/camera/SH?t=ptitloup&p=%01" -q
+
+# Récupère le numéro de la dernière photo/vidéo
+wget "http://10.5.5.9:8080/videos/DCIM/109GOPRO" -O out -q
+out=$(cat out | grep GO | grep JPG | cut -d ">" -f 2 | cut -c 1-12 | tail -n 1)
+
+# Concatenation avec l'url du serveur
+url="http://10.5.5.9:8080/videos/DCIM/109GOPRO/"
+urlout="$url$out"
+echo $urlout
+
+# Télécharge l'image
+wget $urlout -q
+
+# Supprime le fichier non utile
+rm out
+
+echo "Prise de photo"
+#CGI
+cat <<END
+Content-Type: text/plain
+
+END
+

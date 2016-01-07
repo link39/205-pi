@@ -1,0 +1,15 @@
+#!/bin/bash
+# Choisi le mode vidéo
+wget --delete-after "http://10.5.5.9/camera/CM?t=ptitloup&p=%00" -q
+
+# attendre un peu
+sleep 1
+# Prendre une vidéo
+wget --delete-after "http://10.5.5.9/camera/SH?t=ptitloup&p=%01" -q
+
+#CGI
+cat <<END
+Content-Type: text/plain
+
+END
+echo "video start"

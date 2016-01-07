@@ -1,0 +1,10 @@
+#!/bin/bash
+name=`mysql -uroot -pbananapi -se "SELECT Nom FROM bdc.Trajet WHERE encours=1 ORDER BY Nom DESC LIMIT 1;"`
+if [ -z "$name" ]; then
+	name="Pas de trajet en cours"
+fi
+cat <<END
+Content-Type: text/plain
+
+END
+echo $name

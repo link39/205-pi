@@ -1,0 +1,16 @@
+#!/bin/bash
+
+data=`ping -c 1 8.8.8.8 | grep loss |cut -d ' ' -f6`
+
+if [[ $data == 0% ]]
+then
+    data="Activé";
+else
+    data="Désactivé";
+fi
+
+cat <<END
+Content-Type: text/plain
+
+END
+echo $data

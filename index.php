@@ -166,6 +166,12 @@
 	function start_photo(){
 	  $('#photostart').load("/cgi-bin/gopro/gopro_photo");
 	};
+	function start_video(){
+	  $('#videostart').load("/cgi-bin/gopro/gopro_video_start");
+        };
+        function stop_video(){
+          $('#videostop').load("/cgi-bin/gopro/gopro_video_stop");
+        };
     </script>
 
 </head>
@@ -288,9 +294,21 @@
 				<li>
                     <div id="dateHeure"></div>
                 </li>
-				<li>
-					<a onclick="start_video()"><i class="fa  fa-film  fa-fw"></i></a>
-				</li>
+		<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa  fa-film  fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                </a>
+
+		 <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                                <div>
+                                    <a onclick="start_video()"><i>Start</i></a>
+                                </div>
+				<div>
+                                    <a onclick="stop_video()"><i>Stop</i></a>
+                                </div>
+                        </li>
+                    </ul>
+
 				<li>
 					<a onclick="start_photo()"><i class="fa  fa-camera  fa-fw"></i></a> 
 				</li>
@@ -355,7 +373,11 @@
                                 <p id="PconducteurTemp" style="display:none;"></p>
                                 <p id="tempsConduiteTemp" style="display:none;"></p>
 				<p id="photostart" style="display:none;"></p>
-                                <ul>
+                                <p id="videostart" style="display:none;"></p>
+				<p id="videostop" style="display:none;"></p>
+
+
+				<ul>
                                     <li style="list-style-type: none;">
                                         <img id="Pconducteur" src="" alt="Conducteur" height="128" width="128">
                                     </li>

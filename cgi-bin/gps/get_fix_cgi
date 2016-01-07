@@ -1,0 +1,17 @@
+#!/bin/bash
+
+fix=`mysql -uroot -pbananapi -se "SELECT fix FROM bdc.Instantane ORDER BY Id DESC LIMIT 1;"`
+if [[ $fix == 0 ]]
+then
+    data="Désactivé";
+elif  [[ $fix == 1 ]]
+then
+    data="Activé";
+fi
+
+cat <<END
+Content-Type: text/plain
+
+END
+echo $data
+
