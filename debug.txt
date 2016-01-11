@@ -355,3 +355,19 @@ Sun Jan 10 23:41:42 CET 2016
 initialisation du temps de conduite
 Sun Jan 10 23:41:43 CET 2016
 initialisation du systeme
+Sun Jan 10 23:41:43 CET 2016
+gps start
+Sun Jan 10 23:41:43 CET 2016
+gps log start
+Sun Jan 10 23:41:43 CET 2016
+initialisation du temps de conduite
+Sun Jan 10 23:41:43 CET 2016
+initialisation du systeme
+Sun Jan 10 23:41:43 CET 2016
+gps start
+Sun Jan 10 23:41:43 CET 2016
+gps log start
+Sun Jan 10 23:41:43 CET 2016
+initialisation du temps de conduite
+Sun Jan 10 23:41:44 CET 2016
+initialisation du systeme
